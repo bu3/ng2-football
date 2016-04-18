@@ -23,7 +23,9 @@
 
     "postinstall": "npm run typings install",
     "serve": "node local-server.js",
-    "typings" : "typings"
+    "typings" : "typings",
+
+    "update-webdriver": "webdriver-manager update"
   },
 
   "license": "ISC",
