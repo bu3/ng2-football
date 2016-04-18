@@ -1,0 +1,7 @@
+typings
+distribution.zip
+npm-debug*
+node_modules
+.idea
+build
+*.iml
