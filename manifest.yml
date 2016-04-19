@@ -2,3 +2,4 @@
 applications:
   - name: football
     path: build/
+    buildpack: staticfile_buildpack
