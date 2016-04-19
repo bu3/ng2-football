@@ -40,8 +40,13 @@ module.exports = function(config) {
         // Karma plugins loaded
         plugins: [
             'karma-jasmine',
-            'karma-chrome-launcher'
+            'karma-chrome-launcher',
+            'karma-firefox-launcher'
         ]
 
-    })
+    });
+
+    if(process.env.TRAVIS) {
+        configuration.browsers = ['Firefox'];
+    }
 };
