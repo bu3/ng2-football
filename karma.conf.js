@@ -47,6 +47,6 @@ module.exports = function(config) {
     });
 
     if(process.env.TRAVIS) {
-        configuration.browsers = ['Firefox'];
+        config.browsers = ['Firefox'];
     }
 };
