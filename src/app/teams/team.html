@@ -2,11 +2,13 @@
 <input [(ngModel)]="teamId" placeholder="teamId"/>
 <button (click)="load()">Find</button>
 
-<div *ngIf="team.name" >
-    <h1>{{team.name}}</h1>
+<div *ngIf="team">
+    <div *ngIf="team.name">
+        <h1>{{team.name}}</h1>
+    </div>
+    <ul>
+        <li *ngFor="#player of team.players">
+            <player-details [player]="player"></player-details>
+        </li>
+    </ul>
 </div>
-<ul>
-    <li *ngFor="#player of team.players">
-        <player-details [player]="player"></player-details>
-    </li>
-</ul>

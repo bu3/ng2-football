@@ -6,32 +6,30 @@ import {Response} from "angular2/http";
 import {Headers} from "angular2/http";
 import {Http} from "angular2/http";
 import {PlayerDetailsComponent} from "./player.component";
+import {ApiClient} from "./football.api.client";
 
 @Component({
     selector: 'team-component',
     templateUrl: `app/teams/team.html`,
     directives: [PlayerDetailsComponent]
 })
-
 export class TeamComponent {
 
     teamId:string;
 
     team:Team;
 
-    constructor(private _http:Http) {
-        this.team = <Team> {players: []}
+    constructor(private apiClient:ApiClient) {
     }
 
     load():void {
-        let headers = new Headers({'Content-Type': 'application/json'});
-
         if (this.teamId) {
-            this._http.get("http://football-api.cfapps.io/teams/"+this.teamId, {headers}).subscribe(
-                (res:Response) => this.team = res.json(),
-                (error) => console.log(error),
-                ()=> console.log('Team loading complete'));
+            this.apiClient.getTeam(this.teamId).subscribe(
+                {
+                    next: team => this.team = team,
+                    error: error => console.log(error)
+                }
+            );
         }
     }
-
 }
