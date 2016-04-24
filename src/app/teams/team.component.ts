@@ -16,10 +16,24 @@ import {ApiClient} from "./football.api.client";
 export class TeamComponent {
 
     teamId:string;
-
     team:Team;
+    teams:Team[];
 
     constructor(private apiClient:ApiClient) {
+        this.loadTeams();
+    }
+
+    onChange(teamId: string) {
+        this.teamId = teamId;
+        this.load();
+    }
+
+    loadTeams():void {
+        this.apiClient.getTeamsBySeasonId('401').subscribe(
+            {
+                next: (teams) => this.teams = teams
+            }
+        )
     }
 
     load():void {

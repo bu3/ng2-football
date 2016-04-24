@@ -13,4 +13,9 @@ export class ApiClient {
         let headers = new Headers({'Content-Type': 'application/json'});
         return this.http.get(`http://football-api.cfapps.io/teams/${teamId}`, {headers}).map(res => res.json());
     }
+
+    getTeamsBySeasonId(seasonId:string):Observable<Team[]> {
+        let headers = new Headers({'Content-Type': 'application/json'});
+        return this.http.get(`http://football-api.cfapps.io/teams?seasonId=${seasonId}`, {headers}).map(res => res.json());
+    }
 }

@@ -2,18 +2,39 @@ import {TeamComponent} from "../team.component";
 import {ApiClient} from "../football.api.client";
 import {Observable} from "rxjs/Observable";
 
-
 describe('TeamComponent', () => {
 
-    var apiClient, responseBody, getTeamSpy;
+    let apiClient;
+    let getTeamsBySeasonIdSpy, getTeamsBySeasonIdResponseBody;
+    let getTeamSpy, getTeamResponseBody;
 
     beforeEach(function () {
         apiClient = {
             getTeam: () => {
+            },
+            getTeamsBySeasonId: () => {
             }
         };
 
-        responseBody = {
+        getTeamsBySeasonIdResponseBody = [
+            {
+                id: null,
+                name: "Hellas Verona FC",
+                code: null,
+                shortName: "H. Verona",
+                marketValue: "39,350,000 €",
+                logoUrl: "http://upload.wikimedia.org/wikipedia/de/a/a2/Hellas_Verona_1903_FC.svg",
+                players: null
+            }];
+
+        getTeamsBySeasonIdSpy = spyOn(apiClient, 'getTeamsBySeasonId').and.returnValue(
+            Observable.create(observer => {
+                observer.next(getTeamsBySeasonIdResponseBody);
+                observer.complete();
+            })
+        );
+
+        getTeamResponseBody = {
             name: "AS Roma",
             code: "ROM",
             shortName: "Rom",
@@ -31,12 +52,20 @@ describe('TeamComponent', () => {
                 }]
         };
 
+
         getTeamSpy = spyOn(apiClient, 'getTeam').and.returnValue(
             Observable.create(observer => {
-                observer.next(responseBody);
+                observer.next(getTeamResponseBody);
                 observer.complete();
             })
         );
+    });
+
+    it('should load teams when created', () => {
+        let teamComponent = new TeamComponent(apiClient);
+
+        expect(teamComponent.teams).toEqual(getTeamsBySeasonIdResponseBody);
+        expect(getTeamsBySeasonIdSpy.calls.count()).toBe(1);
     });
 
     it('should load team if teamId is present', () => {
@@ -44,16 +73,28 @@ describe('TeamComponent', () => {
         teamComponent.teamId = "100";
         teamComponent.load();
 
-        expect(teamComponent.team).toEqual(responseBody);
-        expect(getTeamSpy.calls.count()).toBe(1)
+        expect(teamComponent.team).toEqual(getTeamResponseBody);
+        expect(getTeamSpy.calls.count()).toBe(1);
     });
 
     it('should not load team if teamId is not present', () => {
         let teamComponent = new TeamComponent(apiClient);
         teamComponent.load();
 
-        expect(teamComponent.team).toBeUndefined()
-        expect(getTeamSpy.calls.count()).toBe(0)
+        expect(teamComponent.team).toBeUndefined();
+        expect(getTeamSpy.calls.count()).toBe(0);
     });
+
+    it('should load team when user picks a team', () => {
+        let teamId = "100";
+        let teamComponent = new TeamComponent(apiClient);
+
+        teamComponent.onChange(teamId);
+
+        expect(teamComponent.teamId).toEqual(teamId);
+        expect(teamComponent.team).toEqual(getTeamResponseBody);
+        expect(getTeamSpy.calls.count()).toBe(1);
+    });
+
 
 });

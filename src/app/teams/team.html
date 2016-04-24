@@ -1,6 +1,8 @@
-<H1>Look for your team:</H1>
-<input [(ngModel)]="teamId" placeholder="teamId"/>
-<button (click)="load()">Find</button>
+<H1>Pick a team from the list:</H1>
+
+<select [ngModel]="teamId" (ngModelChange)="onChange($event)">
+    <option *ngFor="#i of teams" [value]="i.id">{{i.name}}</option>
+</select>
 
 <div *ngIf="team">
     <div *ngIf="team.name">
