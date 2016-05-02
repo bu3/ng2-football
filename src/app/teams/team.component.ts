@@ -8,6 +8,8 @@ import {Http} from "angular2/http";
 import {PlayerDetailsComponent} from "./player.component";
 import {ApiClient} from "./football.api.client";
 
+declare var $: any;
+
 @Component({
     selector: 'team-component',
     templateUrl: `app/teams/team.html`,
@@ -31,7 +33,10 @@ export class TeamComponent {
     loadTeams():void {
         this.apiClient.getTeamsBySeasonId('401').subscribe(
             {
-                next: (teams) => this.teams = teams
+                next: (teams) => {
+                    this.teams = teams;
+                    this.refreshSelect();
+                }
             }
         )
     }
@@ -46,4 +51,14 @@ export class TeamComponent {
             );
         }
     }
+
+    ngAfterViewInit() {
+        this.refreshSelect();
+    }
+
+    private refreshSelect() {
+        $(document).ready(function () {
+            $('select').material_select();
+        });
+    };
 }
