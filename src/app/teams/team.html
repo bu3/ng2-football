@@ -1,4 +1,4 @@
-<H1>Pick a team from the list:</H1>
+<H1>Pick a team:</H1>
 
 <select [ngModel]="teamId" (ngModelChange)="onChange($event)">
     <option *ngFor="#i of teams" [value]="i.id">{{i.name}}</option>
